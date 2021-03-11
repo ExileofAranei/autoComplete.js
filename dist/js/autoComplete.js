@@ -232,6 +232,8 @@
       } else {
         currentFocus--;
       }
+      var targetElement = list[currentFocus];
+      list.scrollTop = targetElement.offsetTop + targetElement.offsetHeight - list.offsetHeight;
       addActive(list);
       config.inputField.setAttribute("aria-activedescendant", list[currentFocus].id);
       eventEmitter(event.srcElement, _objectSpread2(_objectSpread2({
