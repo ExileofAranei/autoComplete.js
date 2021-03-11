@@ -137,7 +137,7 @@ export default class autoComplete {
     /**
      * @emits {response} Emits Event on search response
      **/
-    eventEmitter(this.inputField, dataFeedback, "results");
+    eventEmitter(this.inputField, dataFeedback, "autoComplete.open");
     // - Checks if there are NO results
     // Runs noResults action function
     if (!results.length) return this.noResults ? this.noResults(dataFeedback, generateList) : null;

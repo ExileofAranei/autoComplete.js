@@ -516,7 +516,7 @@
           matches: results,
           results: results.slice(0, this.maxResults)
         };
-        eventEmitter(this.inputField, dataFeedback, "results");
+        eventEmitter(this.inputField, dataFeedback, "autoComplete.open");
         if (!results.length) return this.noResults ? this.noResults(dataFeedback, generateList) : null;
         if (!this.resultsList.render) return this.feedback(dataFeedback);
         results.length ? generateList(this, dataFeedback, results) : null;
