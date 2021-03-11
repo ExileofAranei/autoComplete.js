@@ -32,12 +32,18 @@ const navigate = (config, dataFeedback) => {
       // decrease the currentFocus
       currentFocus--;
     }
-    // Scroll to target element
-    const targetElement = list[currentFocus];
-    list.scrollTop = targetElement.offsetTop + targetElement.offsetHeight - list.offsetHeight;
     // and add "active" class to the list item
     addActive(list);
     config.inputField.setAttribute("aria-activedescendant", list[currentFocus].id);
+    // Scroll to target element
+    const targetElement = list[currentFocus];
+    const listElement = targetElement.parentNode;
+    const targetElementStyles = window.getComputedStyle(targetElement);
+    let targetElementHeight = targetElement.offsetHeight;
+
+    const properties = ['marginTop', 'marginBottom'];
+    properties.forEach((property) => targetElementHeight += parseFloat(targetElementStyles[property]));
+    listElement.scrollTop = targetElement.offsetTop + targetElementHeight - listElement.offsetHeight;
     /**
      * @emits {navigation} Emits Event on results list navigation
      **/

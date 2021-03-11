@@ -232,10 +232,17 @@
       } else {
         currentFocus--;
       }
-      var targetElement = list[currentFocus];
-      list.scrollTop = targetElement.offsetTop + targetElement.offsetHeight - list.offsetHeight;
       addActive(list);
       config.inputField.setAttribute("aria-activedescendant", list[currentFocus].id);
+      var targetElement = list[currentFocus];
+      var listElement = targetElement.parentNode;
+      var targetElementStyles = window.getComputedStyle(targetElement);
+      var targetElementHeight = targetElement.offsetHeight;
+      var properties = ['marginTop', 'marginBottom'];
+      properties.forEach(function (property) {
+        return targetElementHeight += parseFloat(targetElementStyles[property]);
+      });
+      listElement.scrollTop = targetElement.offsetTop + targetElementHeight - listElement.offsetHeight;
       eventEmitter(event.srcElement, _objectSpread2(_objectSpread2({
         event: event
       }, dataFeedback), {}, {
