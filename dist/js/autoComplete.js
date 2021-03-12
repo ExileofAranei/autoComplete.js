@@ -523,7 +523,7 @@
           input: input,
           query: query,
           matches: results,
-          results: results.slice(0, this.maxResults)
+          results: !this.maxResults ? results : results.slice(0, this.maxResults)
         };
         eventEmitter(this.inputField, dataFeedback, "autoComplete.open");
         if (!results.length) return this.noResults ? this.noResults(dataFeedback, generateList) : null;

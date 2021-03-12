@@ -133,7 +133,7 @@ export default class autoComplete {
       ? this.data.results(listMatchingResults(this, query))
       : listMatchingResults(this, query);
     // - Prepare data feedback object
-    const dataFeedback = { input, query, matches: results, results: results.slice(0, this.maxResults) };
+    const dataFeedback = { input, query, matches: results, results: !this.maxResults ? results : results.slice(0, this.maxResults) };
     /**
      * @emits {response} Emits Event on search response
      **/
