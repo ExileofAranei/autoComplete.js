@@ -544,7 +544,7 @@
           if (_this2.data.cache && _this2.data.store) return $return(null);
           return new Promise(function ($return, $error) {
             if (typeof _this2.data.src === "function") {
-              return _this2.data.src().then($return, $error);
+              return _this2.data.src(_this2).then($return, $error);
             }
             return $return(_this2.data.src);
           }).then(function ($await_5) {
