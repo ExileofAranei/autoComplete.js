@@ -166,7 +166,7 @@ export default class autoComplete {
       this.outsideClickHandler = (event) => {
         const listNode = this.resultsList.node;
         const { target } = event;
-        if (listNode !== target && !listNode.contains(target)) {
+        if (listNode && listNode !== target && !listNode.contains(target)) {
           closeAllLists(this, event.target);
           eventEmitter(this.inputField, null, "autoComplete.close");
           if (this.onOutsideClick) { this.onOutsideClick(this); }

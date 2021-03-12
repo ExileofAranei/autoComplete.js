@@ -548,7 +548,7 @@
           this.outsideClickHandler = function (event) {
             var listNode = _this.resultsList.node;
             var target = event.target;
-            if (listNode !== target && !listNode.contains(target)) {
+            if (listNode && listNode !== target && !listNode.contains(target)) {
               closeAllLists(_this, event.target);
               eventEmitter(_this.inputField, null, "autoComplete.close");
               if (_this.onOutsideClick) {
