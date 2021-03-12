@@ -111,7 +111,7 @@ const navigate = (config, dataFeedback) => {
       config.inputField.value = "";
       // Closes open lists
       closeAllLists(config);
-    } else if (event.keyCode === 40 || event.keyCode === 9) {
+    } else if (event.keyCode === 40 || (!event.shiftKey && event.keyCode === 9)) {
       // Update list items state
       update(event, list, true, config);
     } else if (event.keyCode === 38 || (event.shiftKey && event.keyCode === 9)) {
