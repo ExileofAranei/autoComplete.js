@@ -276,7 +276,7 @@
         closeAllLists(config);
       } else if (event.keyCode === 40 || event.keyCode === 9) {
         update(event, list, true, config);
-      } else if (event.keyCode === 38 || event.keyCode === 9) {
+      } else if (event.keyCode === 38 || event.shiftKey && event.keyCode === 9) {
         update(event, list, false, config);
       } else if (event.keyCode === 13) {
         event.preventDefault();
