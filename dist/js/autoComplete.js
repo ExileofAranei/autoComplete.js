@@ -183,13 +183,17 @@
   var closeAllLists = function closeAllLists(config, element) {
     var list = document.getElementsByClassName(config.resultsList.className);
     for (var index = 0; index < list.length; index++) {
-      if (element !== list[index] && element !== config.inputField) list[index].parentNode.removeChild(list[index]);
+      if (element !== list[index] && element !== config.inputField) {
+        list[index].parentNode.removeChild(list[index]);
+        config.resultsList.node = null;
+      }
     }
     config.inputField.removeAttribute("aria-activedescendant");
     config.inputField.setAttribute("aria-expanded", false);
   };
   var generateList = function generateList(config, data, matches) {
     var list = createList(config);
+    config.resultsList.node = list;
     config.inputField.setAttribute("aria-expanded", true);
     var _loop = function _loop(index) {
       var item = data.results[index];
@@ -206,6 +210,9 @@
           })
         };
         if (config.onSelection) config.onSelection(dataFeedback);
+        if (config.closeOnSelection) {
+          closeAllLists(config);
+        }
       });
       list.appendChild(resultItem);
     };
@@ -463,7 +470,9 @@
           highlightClass = _config$highlight$cla === void 0 ? "autoComplete_highlighted" : _config$highlight$cla,
           feedback = config.feedback,
           onSelection = config.onSelection,
-          onOutsideClick = config.onOutsideClick;
+          onOutsideClick = config.onOutsideClick,
+          _config$closeOnSelect = config.closeOnSelection,
+          closeOnSelection = _config$closeOnSelect === void 0 ? false : _config$closeOnSelect;
       this.name = name;
       this.selector = selector;
       this.observer = observer;
@@ -513,6 +522,7 @@
       this.feedback = feedback;
       this.onSelection = onSelection;
       this.onOutsideClick = onOutsideClick;
+      this.closeOnSelection = closeOnSelection;
       this.inputField = typeof this.selector === "string" ? document.querySelector(this.selector) : this.selector();
       this.observer ? this.preInit() : this.init();
     }
@@ -536,13 +546,20 @@
         if (!this.isOutsideEventAttached) {
           this.isOutsideEventAttached = true;
           this.outsideClickHandler = function (event) {
-            closeAllLists(_this, event.target);
-            eventEmitter(_this.inputField, null, "autoComplete.close");
-            if (_this.onOutsideClick) {
-              _this.onOutsideClick(_this);
+            var listNode = _this.resultsList.node;
+            var target = event.target;
+            if (listNode !== target && !listNode.contains(target)) {
+              closeAllLists(_this, event.target);
+              eventEmitter(_this.inputField, null, "autoComplete.close");
+              if (_this.onOutsideClick) {
+                _this.onOutsideClick(_this);
+              }
+              _this.isOutsideEventAttached = false;
+              _this.removeOutsideClickHandler();
             }
-            _this.isOutsideEventAttached = false;
-            document.removeEventListener("click", _this.outsideClickHandler);
+          };
+          this.removeOutsideClickHandler = function () {
+            return document.removeEventListener("click", _this.outsideClickHandler);
           };
           document.addEventListener("click", this.outsideClickHandler);
         }

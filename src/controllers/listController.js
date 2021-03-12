@@ -15,7 +15,10 @@ const closeAllLists = (config, element) => {
   for (let index = 0; index < list.length; index++) {
     // Close all lists
     // except the ones passed as an argument
-    if (element !== list[index] && element !== config.inputField) list[index].parentNode.removeChild(list[index]);
+    if (element !== list[index] && element !== config.inputField) {
+      list[index].parentNode.removeChild(list[index]);
+      config.resultsList.node = null;
+    } 
   }
   // Remove active descendant
   config.inputField.removeAttribute("aria-activedescendant");
@@ -35,6 +38,7 @@ const closeAllLists = (config, element) => {
 const generateList = (config, data, matches) => {
   // Initiate creating list process
   const list = createList(config);
+  config.resultsList.node = list;
   // Set list to opened
   config.inputField.setAttribute("aria-expanded", true);
   // Iterate over the data
@@ -58,6 +62,10 @@ const generateList = (config, data, matches) => {
       };
       // Returns the selected value onSelection if set
       if (config.onSelection) config.onSelection(dataFeedback);
+      // Close list if closeOnSelect option is provided
+      if (config.closeOnSelection) {
+        closeAllLists(config);
+      }
     });
     // Add result to the list
     list.appendChild(resultItem);

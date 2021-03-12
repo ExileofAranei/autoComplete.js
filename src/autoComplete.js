@@ -68,6 +68,7 @@ export default class autoComplete {
       feedback, // Data feedback
       onSelection, // Action function on result selection
       onOutsideClick,
+      closeOnSelection = false,
     } = config;
 
     // Assigning config values to properties
@@ -120,6 +121,7 @@ export default class autoComplete {
     this.feedback = feedback;
     this.onSelection = onSelection;
     this.onOutsideClick = onOutsideClick;
+    this.closeOnSelection = closeOnSelection;
     // Assign the input field selector
     this.inputField = typeof this.selector === "string" ? document.querySelector(this.selector) : this.selector();
     // Invoke preInit if enabled
@@ -162,12 +164,17 @@ export default class autoComplete {
     if (!this.isOutsideEventAttached) {
       this.isOutsideEventAttached = true;
       this.outsideClickHandler = (event) => {
-        closeAllLists(this, event.target);
-        eventEmitter(this.inputField, null, "autoComplete.close");
-        if (this.onOutsideClick) { this.onOutsideClick(this); }
-        this.isOutsideEventAttached = false;
-        document.removeEventListener("click", this.outsideClickHandler);
+        const listNode = this.resultsList.node;
+        const { target } = event;
+        if (listNode !== target && !listNode.contains(target)) {
+          closeAllLists(this, event.target);
+          eventEmitter(this.inputField, null, "autoComplete.close");
+          if (this.onOutsideClick) { this.onOutsideClick(this); }
+          this.isOutsideEventAttached = false;
+          this.removeOutsideClickHandler();
+        }
       }
+      this.removeOutsideClickHandler = () => document.removeEventListener("click", this.outsideClickHandler);
 
       document.addEventListener("click", this.outsideClickHandler);
     }
