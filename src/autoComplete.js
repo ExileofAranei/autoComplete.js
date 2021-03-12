@@ -168,7 +168,7 @@ export default class autoComplete {
     // and store is empty
     if (this.data.cache && this.data.store) return null;
     // Fetch new data from source and store it
-    this.data.store = typeof this.data.src === "function" ? await this.data.src() : this.data.src;
+    this.data.store = typeof this.data.src === "function" ? await this.data.src(this) : this.data.src;
     /**
      * @emits {request} Emits Event on data response
      **/
