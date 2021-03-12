@@ -119,6 +119,7 @@ export default class autoComplete {
     }
     this.feedback = feedback;
     this.onSelection = onSelection;
+    this.onOutsideClick = onOutsideClick;
     // Assign the input field selector
     this.inputField = typeof this.selector === "string" ? document.querySelector(this.selector) : this.selector();
     // Invoke preInit if enabled

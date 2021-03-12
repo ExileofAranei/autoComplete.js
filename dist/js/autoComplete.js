@@ -462,8 +462,8 @@
           _config$highlight$cla = _config$highlight.className,
           highlightClass = _config$highlight$cla === void 0 ? "autoComplete_highlighted" : _config$highlight$cla,
           feedback = config.feedback,
-          onSelection = config.onSelection;
-          config.onOutsideClick;
+          onSelection = config.onSelection,
+          onOutsideClick = config.onOutsideClick;
       this.name = name;
       this.selector = selector;
       this.observer = observer;
@@ -512,6 +512,7 @@
       };
       this.feedback = feedback;
       this.onSelection = onSelection;
+      this.onOutsideClick = onOutsideClick;
       this.inputField = typeof this.selector === "string" ? document.querySelector(this.selector) : this.selector();
       this.observer ? this.preInit() : this.init();
     }
