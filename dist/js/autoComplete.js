@@ -531,10 +531,16 @@
         results.length ? generateList(this, dataFeedback, results) : null;
         eventEmitter(this.inputField, dataFeedback, "rendered");
         navigate(this, dataFeedback);
-        document.addEventListener("click", function (event) {
-          closeAllLists(_this, event.target);
-          eventEmitter(_this.inputField, null, "autoComplete.close");
-        });
+        if (!this.isOutsideEventAttached) {
+          this.isOutsideEventAttached = true;
+          this.onOutsideClick = function (event) {
+            closeAllLists(_this, event.target);
+            eventEmitter(_this.inputField, null, "autoComplete.close");
+            _this.isOutsideEventAttached = false;
+            document.removeEventListener("click", _this.onOutsideClick);
+          };
+          document.addEventListener("click", this.onOutsideClick);
+        }
       }
     }, {
       key: "dataStore",

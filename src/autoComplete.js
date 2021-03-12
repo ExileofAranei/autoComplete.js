@@ -157,10 +157,17 @@ export default class autoComplete {
      * and closes this menu if clicked outside the list and input field
      * @listens {click} Listens to all `click` events on the document
      **/
-    document.addEventListener("click", (event) => {
-      closeAllLists(this, event.target);
-      eventEmitter(this.inputField, null, "autoComplete.close");
-    });
+    if (!this.isOutsideEventAttached) {
+      this.isOutsideEventAttached = true;
+      this.onOutsideClick = (event) => {
+        closeAllLists(this, event.target);
+        eventEmitter(this.inputField, null, "autoComplete.close");
+        this.isOutsideEventAttached = false;
+        document.removeEventListener("click", this.onOutsideClick);
+      }
+
+      document.addEventListener("click", this.onOutsideClick);
+    }
   }
 
   async dataStore() {
