@@ -463,6 +463,7 @@
           highlightClass = _config$highlight$cla === void 0 ? "autoComplete_highlighted" : _config$highlight$cla,
           feedback = config.feedback,
           onSelection = config.onSelection;
+          config.onOutsideClick;
       this.name = name;
       this.selector = selector;
       this.observer = observer;
@@ -533,13 +534,16 @@
         navigate(this, dataFeedback);
         if (!this.isOutsideEventAttached) {
           this.isOutsideEventAttached = true;
-          this.onOutsideClick = function (event) {
+          this.outsideClickHandler = function (event) {
             closeAllLists(_this, event.target);
             eventEmitter(_this.inputField, null, "autoComplete.close");
+            if (_this.onOutsideClick) {
+              _this.onOutsideClick(_this);
+            }
             _this.isOutsideEventAttached = false;
-            document.removeEventListener("click", _this.onOutsideClick);
+            document.removeEventListener("click", _this.outsideClickHandler);
           };
-          document.addEventListener("click", this.onOutsideClick);
+          document.addEventListener("click", this.outsideClickHandler);
         }
       }
     }, {

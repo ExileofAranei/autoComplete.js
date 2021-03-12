@@ -67,6 +67,7 @@ export default class autoComplete {
       } = {},
       feedback, // Data feedback
       onSelection, // Action function on result selection
+      onOutsideClick,
     } = config;
 
     // Assigning config values to properties
@@ -159,14 +160,15 @@ export default class autoComplete {
      **/
     if (!this.isOutsideEventAttached) {
       this.isOutsideEventAttached = true;
-      this.onOutsideClick = (event) => {
+      this.outsideClickHandler = (event) => {
         closeAllLists(this, event.target);
         eventEmitter(this.inputField, null, "autoComplete.close");
+        if (this.onOutsideClick) { this.onOutsideClick(this); }
         this.isOutsideEventAttached = false;
-        document.removeEventListener("click", this.onOutsideClick);
+        document.removeEventListener("click", this.outsideClickHandler);
       }
 
-      document.addEventListener("click", this.onOutsideClick);
+      document.addEventListener("click", this.outsideClickHandler);
     }
   }
 
